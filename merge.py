@@ -27,7 +27,7 @@ def create_txt_for_hadd(j, name):
         name = name + '.txt'
 
     lfns = create_lfn_list(j)
-    gangascriptdir = os.environ['HOME'] + "/gangascripts"
+    gangascriptdir = os.path.abspath(__file__)
     lfn_urls = subprocess.check_output(
         [
             "lb-run",
