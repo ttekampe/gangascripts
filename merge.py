@@ -4,13 +4,16 @@ import subprocess
 
 def create_lfn_list(j):
     '''
-    Takes a job as input and returns a list containig the lfns of all
-    DiracFiles the job created.
+    Takes a job as input and returns two lists. The first list contains the
+    lfns of all DiracFiles the job created and the second the grid site they
+    are on.
     '''
     lfns = []
+    locations = []
     for sj in j.subjobs:
         for df in sj.outputfiles.get(DiracFile):
             lfns.append(df.lfn)
+            locations.append(df.locations[0])
     return lfns
 
 
@@ -26,7 +29,7 @@ def create_txt_for_hadd(j, name):
             return
         name = name + '.txt'
 
-    lfns = create_lfn_list(j)
+    lfns, locations = create_lfn_list(j)
     gangascriptdir = os.path.abspath(__file__)
     lfn_urls = subprocess.check_output(
         [
@@ -46,7 +49,7 @@ def create_txt_for_hadd(j, name):
 
     with open(name, 'w') as f:
         for lfn in lfn_urls:
-            f.write('"' + lfn + '"\n')
+            f.write(lfn + '\n')
     print('Done. Now run')
     print('hadd -ff <taget> @{}'.format(name))
     print('Make sure to have a valid grid token at all time')
