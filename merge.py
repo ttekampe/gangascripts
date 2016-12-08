@@ -1,5 +1,6 @@
 import os
 import subprocess
+from Ganga.GPI import DiracFile
 
 
 def create_lfn_list(j):
